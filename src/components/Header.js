@@ -52,30 +52,23 @@ class Header extends Component {
         this.state={
           width: window.innerWidth,
           height: 0,
+          newHeight: 0,
         };
       };
 
-      componentDidMount = () => {this.elemHeight()};
+      componentDidMount = () => this.elemHeight();
 
-      //An attempt at setting the height of the header at page load. Will figure out 
-      //where I went wrong tomorrow.
+      //This dictates the header shrink height animation on scroll based on screen size.
       elemHeight = () => { 
-      console.log(this.state.height)
         let renderHeight = document.getElementById('header').clientHeight;
-        this.setState({height: renderHeight});
-      
-      let difference = this.state.height * .3;
-      let newHeight = this.state.height - difference;
-      console.log(this.state.height)
-
+        let difference = document.getElementById('header').clientHeight * .3;
+        let newHeight = document.getElementById('header').clientHeight - difference;
+        this.setState({height: renderHeight, newHeight: newHeight});
     };
 
 
 
     render() {
-        //Defining the variables to be used in the header scroll effect.
-        // const height = height based on max-height
-        // const newHeight = height - 30%
         //This calls the function that controls the header scroll effect.
         window.onscroll = function () { scrollFunction();  }
 
@@ -83,11 +76,11 @@ class Header extends Component {
         const scrollFunction = () => {
             if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
                 document.getElementById("header").style.fontSize = "10px";
-                document.getElementById("header").style.height = "70px";
+                document.getElementById("header").style.height = `${this.state.newHeight}px`;
 
             } else {
                 document.getElementById("header").style.fontSize = "15px";
-                document.getElementById("header").style.height = "90px";
+                document.getElementById("header").style.height = `${this.state.height}px`;
             }
         };
 
@@ -96,6 +89,7 @@ class Header extends Component {
         return (
             <Head id="header">
                 <h1>Jared Butler</h1>
+                <button onClick={() => console.log(this.state)}>Click Me</button>
             </Head>
         )
     }
